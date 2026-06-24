@@ -1,268 +1,678 @@
-# Uber Frontend Documentation
+# Uber Clone - Full Stack Application
+
+A comprehensive ride-sharing application built with modern web technologies. Features real-time tracking, user and captain authentication, ride management, and interactive mapping.
 
 ## Table of Contents
-- [Overview](#overview)
+- [Project Overview](#project-overview)
 - [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Routes](#routes)
-  - [/ — Start](#--start)
-  - [/login — User Login](#login--user-login)
-  - [/signup — User Signup](#signup--user-signup)
-  - [/captain-login — Captain Login](#captain-login--captain-login)
-  - [/captain-signup — Captain Signup](#captain-signup--captain-signup)
-  - [/home — User Home](#home--user-home)
-  - [/captain-home — Captain Home](#captain-home--captain-home)
-  - [/riding — User Active Ride](#riding--user-active-ride)
-  - [/captain-riding — Captain Active Ride](#captain-riding--captain-active-ride)
-  - [/users/logout — User Logout](#userslogout--user-logout)
-  - [/captains/logout — Captain Logout](#captainslogout--captain-logout)
+- [Project Structure](#project-structure)
+- [Installation & Setup](#installation--setup)
+- [Backend Documentation](#backend-documentation)
+- [Frontend Documentation](#frontend-documentation)
+- [API Endpoints](#api-endpoints)
+- [Features](#features)
+- [Real-Time Communication](#real-time-communication)
+- [Contributing](#contributing)
 
 ---
 
-## Overview
+## Project Overview
 
-Frontend for the Uber clone app built with React and Vite. Handles user and captain authentication flows with a clean mobile-first UI.
+This is a full-stack Uber clone application that allows:
+- **Users** to book rides and track drivers in real-time
+- **Captains** to accept ride requests and complete trips
+- **Real-time updates** via WebSocket connections
+- **Authentication & Authorization** with JWT tokens
+- **Interactive mapping** with Leaflet for live tracking
 
 ---
 
 ## Tech Stack
 
-- React 19
-- Vite 8
-- Tailwind CSS v4
-- React Router DOM
+### Backend
+- **Runtime:** Node.js
+- **Framework:** Express.js 5.2
+- **Database:** MongoDB + Mongoose 9.3
+- **Authentication:** JWT + bcrypt
+- **Real-time:** Socket.io 4.8
+- **Validation:** express-validator
+- **Dev Tools:** Nodemon
+
+### Frontend
+- **Framework:** React 19
+- **Build Tool:** Vite 8
+- **Styling:** Tailwind CSS v4
+- **Routing:** React Router DOM 7
+- **Real-time:** Socket.io-client 4.8
+- **Maps:** Leaflet + React-Leaflet
+- **Animations:** GSAP 3.14
+- **HTTP Client:** Axios
+- **State Management:** React Context
 
 ---
 
-## Getting Started
+## Project Structure
 
-```bash
-cd Frontend
-npm install
-npm run dev
+```
+Uber/
+├── Backend/
+│   ├── controllers/          # Business logic layer
+│   │   ├── user.controller.js
+│   │   ├── captain.controller.js
+│   │   ├── ride.controller.js
+│   │   └── map.controller.js
+│   ├── models/               # Database schemas
+│   │   ├── user.model.js
+│   │   ├── captain.model.js
+│   │   ├── ride.model.js
+│   │   └── blacklist.model.js
+│   ├── routes/               # API endpoints
+│   │   ├── user.routes.js
+│   │   ├── captain.route.js
+│   │   ├── ride.routes.js
+│   │   └── maps.route.js
+│   ├── services/             # Business services
+│   ├── middleware/           # Auth & request handlers
+│   │   └── auth.middleware.js
+│   ├── db/                   # Database connection
+│   ├── app.js                # Express app setup
+│   ├── server.js             # Server entry point
+│   ├── socket.js             # Socket.io configuration
+│   └── package.json
+│
+├── Frontend/
+│   ├── src/
+│   │   ├── components/       # Reusable React components
+│   │   │   ├── LocationSearchPanel.jsx
+│   │   │   ├── VehiclePanel.jsx
+│   │   │   ├── ConfirmRidePopup.jsx
+│   │   │   ├── RidePopUp.jsx
+│   │   │   ├── CaptainDetails.jsx
+│   │   │   ├── ConfirmedRide.jsx
+│   │   │   ├── liveTracking.jsx
+│   │   │   ├── WaitingforDriver.jsx
+│   │   │   ├── LookingforDriver.jsx
+│   │   │   └── FinishRide.jsx
+│   │   ├── pages/            # Route pages
+│   │   │   ├── Start.jsx
+│   │   │   ├── UserLogin.jsx
+│   │   │   ├── UserSignup.jsx
+│   │   │   ├── CaptainLogin.jsx
+│   │   │   ├── CaptainSignup.jsx
+│   │   │   ├── Home.jsx
+│   │   │   ├── CaptainHome.jsx
+│   │   │   ├── Riding.jsx
+│   │   │   ├── CaptainRiding.jsx
+│   │   │   ├── UserLogout.jsx
+│   │   │   └── CaptainLogout.jsx
+│   │   ├── context/          # Global state management
+│   │   │   ├── UserContext.jsx
+│   │   │   ├── CaptainContext.jsx
+│   │   │   └── SocketContext.jsx
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   ├── App.css
+│   │   └── index.css
+│   ├── public/
+│   ├── vite.config.js
+│   ├── package.json
+│   └── eslint.config.js
+│
+└── package.json (root)
 ```
 
-App runs on `http://localhost:5173` by default.
+---
+
+## Installation & Setup
+
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB (local or cloud instance)
+- Git
+
+### Backend Setup
+
+```bash
+# Navigate to Backend directory
+cd Backend
+
+# Install dependencies
+npm install
+
+# Create .env file in Backend directory
+echo MONGODB_URI=your_mongodb_connection_string > .env
+echo JWT_SECRET=your_secret_key >> .env
+echo PORT=4000 >> .env
+
+# Start the server
+npm run dev  # Development mode with nodemon
+# OR
+npm start   # Production mode
+```
+
+**Backend runs on:** `http://localhost:4000`
+
+### Frontend Setup
+
+```bash
+# Navigate to Frontend directory
+cd Frontend
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Run ESLint
+npm run lint
+```
+
+**Frontend runs on:** `http://localhost:5173`
+
+### Environment Variables
+
+**Backend (.env)**
+```
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/uberdatabase
+JWT_SECRET=your_jwt_secret_key
+PORT=4000
+SOCKET_PORT=4000
+```
 
 ---
 
-## Routes
+## Backend Documentation
 
-### `/` — Start
+### Authentication Flow
 
-Landing page shown when the user first opens the app.
+#### User Registration
+```
+POST /users/register
+```
+**Request Body:**
+```json
+{
+  "Fullname": {
+    "Firstname": "John",
+    "Lastname": "Doe"
+  },
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+**Validations:**
+- Firstname: minimum 3 characters
+- Email: valid email format
+- Password: minimum 6 characters
 
-**Component:** `pages/Start.jsx`  
-**Auth Required:** No
+#### User Login
+```
+POST /users/Login
+```
+**Request Body:**
+```json
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
 
-**What it shows:**
-- Full screen hero background image
-- Uber logo
-- "Get Started With Uber" card at the bottom with a Continue button
+#### Captain Registration
+```
+POST /captains/register
+```
+**Request Body:**
+```json
+{
+  "Fullname": {
+    "Firstname": "Jane",
+    "Lastname": "Smith"
+  },
+  "email": "jane@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "Black",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+**Vehicle Types:** `car`, `motorcycle`, `auto`
 
-**Navigation:**
-| Action | Navigates To |
-|--------|-------------|
-| Click Continue | `/login` |
+#### Captain Login
+```
+POST /captains/login
+```
+**Request Body:**
+```json
+{
+  "email": "jane@example.com",
+  "password": "password123"
+}
+```
 
----
+### Protected Routes
 
-### `/login` — User Login
+#### Get User Profile
+```
+GET /users/profile
+```
+**Headers:** `Authorization: Bearer <token>`
 
-Login page for existing users.
+#### Get Captain Profile
+```
+GET /captains/profile
+```
+**Headers:** `Authorization: Bearer <token>`
 
-**Component:** `pages/UserLogin.jsx`  
-**Auth Required:** No
+#### User Logout
+```
+POST /users/logout
+```
+**Headers:** `Authorization: Bearer <token>`
 
-**What it shows:**
-- Email and password input fields
-- Login button
-- Link to signup for new users
-- "Sign in as Captain" button at the bottom
+#### Captain Logout
+```
+POST /captains/logout
+```
+**Headers:** `Authorization: Bearer <token>`
 
-**Form Data Collected:**
-| Field | Type | Required |
-|-------|------|----------|
-| `email` | String | Yes |
-| `password` | String | Yes |
+### Ride Management Routes
 
-**Navigation:**
-| Action | Navigates To |
-|--------|-------------|
-| Click Sign Up | `/signup` |
-| Click Sign in as Captain | `/captain-login` |
+#### Create Ride
+```
+POST /rides/create
+```
 
----
+#### Accept Ride
+```
+POST /rides/accept
+```
 
-### `/signup` — User Signup
+#### Start Ride
+```
+POST /rides/start
+```
 
-Registration page for new users.
+#### End Ride
+```
+POST /rides/end
+```
 
-**Component:** `pages/UserSignup.jsx`  
-**Auth Required:** No
+### Maps Routes
 
-**What it shows:**
-- First name and last name inputs (side by side)
-- Email and password input fields
-- Create Account button
-- Link to login for existing users
-- Privacy policy notice at the bottom
+#### Get Coordinates
+```
+GET /maps/get-coordinates
+```
 
-**Form Data Collected:**
-| Field | Type | Required |
-|-------|------|----------|
-| `Fullname.firstname` | String | Yes — min 3 characters |
-| `Fullname.lastname` | String | No |
-| `email` | String | Yes |
-| `password` | String | Yes — min 6 characters |
+#### Get Distance & Time
+```
+GET /maps/get-distance-time
+```
 
-**Navigation:**
-| Action | Navigates To |
-|--------|-------------|
-| Click Login | `/login` |
-
----
-
-### `/captain-login` — Captain Login
-
-Login page for existing captains.
-
-**Component:** `pages/CaptainLogin.jsx`  
-**Auth Required:** No
-
-**What it shows:**
-- Email and password input fields
-- Login as Captain button
-- Link to captain signup for new captains
-- "Sign in as User" button at the bottom
-
-**Form Data Collected:**
-| Field | Type | Required |
-|-------|------|----------|
-| `email` | String | Yes |
-| `password` | String | Yes |
-
-**Navigation:**
-| Action | Navigates To |
-|--------|-------------|
-| Click Create an account | `/captain-signup` |
-| Click Sign in as User | `/login` |
-
----
-
-### `/captain-signup` — Captain Signup
-
-Registration page for new captains.
-
-**Component:** `pages/CaptainSignup.jsx`  
-**Auth Required:** No
-
-**What it shows:**
-- First name and last name inputs (side by side)
-- Email and password input fields
-- Create Account button
-- Link to captain login for existing captains
-- Privacy policy notice at the bottom
-
-**Form Data Collected:**
-| Field | Type | Required |
-|-------|------|----------|
-| `Fullname.firstname` | String | Yes — min 3 characters |
-| `Fullname.lastname` | String | No |
-| `email` | String | Yes |
-| `password` | String | Yes — min 6 characters |
-
-**Navigation:**
-| Action | Navigates To |
-|--------|-------------|
-| Click Login | `/captain-login` |
-
----
-
-### `/home` — User Home
-
-Main user booking interface, accessible only after logging in.
-
-**Component:** `pages/Home.jsx`  
-**Auth Required:** Yes (`UserProtectedWrapper`)
-
-**What it shows:**
-- Background map using Leaflet
-- Floating "Uber" logo menu
-- Bottom panel for finding a trip and exploring vehicle options
-- Dynamic slide-up panels via GSAP (Location search, vehicle panels, confirming ride)
-
-**Key Features:**
-- Establishes connection to WebSocket server.
-- Uses `useLocation` & `useRef` hooks to manage sliding panels and state.
+#### Get Suggestions
+```
+GET /maps/get-suggestions
+```
 
 ---
 
-### `/captain-home` — Captain Home
+## Frontend Documentation
 
-Main captain dashboard, accessible only after a captain logs in.
+## Frontend Documentation
 
-**Component:** `pages/CaptainHome.jsx`  
-**Auth Required:** Yes (`CaptainProtectedWrapper`)
+### User Routes
 
-**What it shows:**
-- Active background map for standard navigation view
-- Captain's current offline/online stat card
-- Sliding UI panels for incoming ride requests
+#### `/` — Start Page
+- **Component:** `pages/Start.jsx`
+- **Auth Required:** No
+- **Features:**
+  - Hero landing page with Uber logo
+  - "Get Started" button navigation
+  - Responsive design
 
-**Key Features:**
-- Listen to socket events (`ride-request`) and accepts rides.
-- Continually updates coordinates via browser's live `geolocation`.
+#### `/login` — User Login
+- **Component:** `pages/UserLogin.jsx`
+- **Auth Required:** No
+- **Fields:**
+  - Email (required)
+  - Password (required, min 6 chars)
+- **Navigation:**
+  - New user → `/signup`
+  - Sign as Captain → `/captain-login`
+
+#### `/signup` — User Registration
+- **Component:** `pages/UserSignup.jsx`
+- **Auth Required:** No
+- **Fields:**
+  - First Name (required, min 3 chars)
+  - Last Name (optional)
+  - Email (required)
+  - Password (required, min 6 chars)
+- **Navigation:**
+  - Existing user → `/login`
+
+#### `/home` — User Home (Main Booking Interface)
+- **Component:** `pages/Home.jsx`
+- **Auth Required:** Yes (UserProtectedWrapper)
+- **Features:**
+  - Interactive map with Leaflet
+  - Location search panel
+  - Vehicle type selection
+  - Real-time ride booking
+  - WebSocket connection for live updates
+  - GSAP animations for smooth transitions
+
+#### `/riding` — Active Ride (User)
+- **Component:** `pages/Riding.jsx`
+- **Auth Required:** Yes
+- **Shows:**
+  - Driver information
+  - Vehicle details (license plate, model)
+  - Live tracking map
+  - Fare information
+  - ETA to destination
+
+#### `/users/logout` — User Logout
+- **Component:** `pages/UserLogout.jsx`
+- **Auth Required:** Yes
+- **Action:** Clears auth tokens and redirects to `/login`
+
+### Captain Routes
+
+#### `/captain-login` — Captain Login
+- **Component:** `pages/CaptainLogin.jsx`
+- **Auth Required:** No
+- **Fields:**
+  - Email (required)
+  - Password (required)
+- **Navigation:**
+  - New captain → `/captain-signup`
+  - Sign as User → `/login`
+
+#### `/captain-signup` — Captain Registration
+- **Component:** `pages/CaptainSignup.jsx`
+- **Auth Required:** No
+- **Fields:**
+  - First Name (required, min 3 chars)
+  - Last Name (optional)
+  - Email (required)
+  - Password (required, min 6 chars)
+  - Vehicle info (color, plate, capacity, type)
+- **Navigation:**
+  - Existing captain → `/captain-login`
+
+#### `/captain-home` — Captain Dashboard
+- **Component:** `pages/CaptainHome.jsx`
+- **Auth Required:** Yes (CaptainProtectedWrapper)
+- **Features:**
+  - Online/offline status toggle
+  - Incoming ride requests
+  - Real-time geolocation tracking
+  - Socket.io event listeners for ride requests
+  - Map view with current location
+
+#### `/captain-riding` — Active Ride (Captain)
+- **Component:** `pages/CaptainRiding.jsx`
+- **Auth Required:** Yes
+- **Shows:**
+  - Drop-off passenger details
+  - Distance to destination
+  - Live tracking map
+  - Route navigation
+  - Finish ride button
+
+#### `/captains/logout` — Captain Logout
+- **Component:** `pages/CaptainLogout.jsx`
+- **Auth Required:** Yes
+- **Action:** Clears auth tokens and redirects to `/captain-login`
+
+### Context Providers
+
+#### UserContext
+- Manages user authentication state
+- Stores user data and tokens
+- Provides auth methods
+
+#### CaptainContext
+- Manages captain authentication state
+- Stores captain profile and vehicle info
+- Handles captain-specific operations
+
+#### SocketContext
+- Manages Socket.io connections
+- Handles real-time events
+- Broadcasts location updates
 
 ---
 
-### `/riding` — User Active Ride
+## API Endpoints
 
-View for users currently inside a confirmed ongoing ride.
+### User Endpoints
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/users/register` | No | Register new user |
+| POST | `/users/Login` | No | Login user |
+| GET | `/users/profile` | Yes | Get user profile |
+| POST | `/users/logout` | Yes | Logout user |
 
-**Component:** `pages/Riding.jsx`  
-**Auth Required:** Yes
+### Captain Endpoints
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/captains/register` | No | Register new captain |
+| POST | `/captains/login` | No | Login captain |
+| GET | `/captains/profile` | Yes | Get captain profile |
+| POST | `/captains/logout` | Yes | Logout captain |
 
-**What it shows:**
-- Driver & vehicle information (e.g., license plate, driver name)
-- Live tracking map showing current location
-- Payment/Fare details button
+### Ride Endpoints
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/rides/create` | Yes | Create new ride |
+| POST | `/rides/accept` | Yes | Accept ride request |
+| POST | `/rides/start` | Yes | Start ride |
+| POST | `/rides/end` | Yes | End ride |
 
----
-
-### `/captain-riding` — Captain Active Ride
-
-Active ride perspective when a captain is completing a trip.
-
-**Component:** `pages/CaptainRiding.jsx`  
-**Auth Required:** Yes (`CaptainProtectedWrapper`)
-
-**What it shows:**
-- Distance to destination and drop-off user details
-- Secure "Finish Ride" interaction panel
-- Live tracking map showing moving towards the route
-
----
-
-### `/users/logout` — User Logout
-
-Processes the logout transition for standard users.
-
-**Component:** `pages/UserLogout.jsx`  
-**Auth Required:** Yes (`UserProtectedWrapper`)
-
-**Action:** 
-- Calls the `/users/logout` backend API, clears localStorage tokens, and redirects safely back to `/login`.
+### Maps Endpoints
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/maps/get-coordinates` | Yes | Get location coordinates |
+| GET | `/maps/get-distance-time` | Yes | Get distance & time between locations |
+| GET | `/maps/get-suggestions` | Yes | Get location suggestions |
 
 ---
 
-### `/captains/logout` — Captain Logout
+## Features
 
-Processes the logout transition for captains.
+### User Features
+- ✅ User registration and authentication
+- ✅ Real-time ride booking
+- ✅ Location search with suggestions
+- ✅ Vehicle type selection (Car, Motorcycle, Auto)
+- ✅ Live driver tracking
+- ✅ Fare estimation
+- ✅ Ride history
+- ✅ Secure logout
 
-**Component:** `pages/CaptainLogout.jsx`  
-**Auth Required:** Yes (`CaptainProtectedWrapper`)
+### Captain Features
+- ✅ Captain registration with vehicle details
+- ✅ Online/offline status management
+- ✅ Real-time ride request notifications
+- ✅ Accept/reject ride requests
+- ✅ Live location tracking
+- ✅ Route optimization
+- ✅ Ride completion
+- ✅ Secure logout
 
-**Action:** 
-- Calls the `/captains/logout` backend API, clears auth tokens, and navigates seamlessly to `/captain-login`.
+### Common Features
+- ✅ JWT-based authentication
+- ✅ Password hashing with bcrypt
+- ✅ Email validation
+- ✅ Input validation using express-validator
+- ✅ Error handling & logging
+- ✅ Responsive mobile-first UI
+- ✅ Real-time updates with Socket.io
+- ✅ Interactive mapping with Leaflet
+
+---
+
+## Real-Time Communication
+
+### Socket.io Events
+
+#### Client to Server
+- `ride-request` - Send ride request to captains
+- `update-location` - Update captain's current location
+- `ride-accepted` - Confirm ride acceptance
+- `ride-started` - Notify ride has started
+- `ride-completed` - Notify ride completion
+
+#### Server to Client
+- `ride-request-received` - Notify captain of new ride
+- `captain-location-updated` - Update user with driver location
+- `ride-accepted` - Confirm ride was accepted
+- `ride-started` - Notify ride has started
+- `ride-completed` - Notify ride completion
+
+---
+
+## Authentication & Security
+
+### Password Security
+- Passwords are hashed using bcrypt (10 salt rounds)
+- Never stored in plain text
+- Validated on both frontend and backend
+
+### JWT Tokens
+- Tokens stored in cookies and localStorage
+- Auto-included in Authorization headers
+- Verified on protected routes
+
+### Input Validation
+- Email format validation
+- Password strength requirements (min 6 characters)
+- Name field length validation
+- Vehicle information validation
+
+---
+
+## Database Models
+
+### User Model
+```javascript
+{
+  Fullname: { Firstname, Lastname },
+  email: String (unique),
+  password: String (hashed),
+  createdAt: Timestamp
+}
+```
+
+### Captain Model
+```javascript
+{
+  Fullname: { Firstname, Lastname },
+  email: String (unique),
+  password: String (hashed),
+  vehicle: {
+    color: String,
+    plate: String,
+    capacity: Number,
+    vehicleType: Enum['car', 'motorcycle', 'auto']
+  },
+  status: String ('active', 'inactive'),
+  location: { latitude, longitude },
+  createdAt: Timestamp
+}
+```
+
+### Ride Model
+```javascript
+{
+  user: ObjectId (reference),
+  captain: ObjectId (reference),
+  pickupLocation: String,
+  dropoffLocation: String,
+  status: String ('pending', 'accepted', 'ongoing', 'completed', 'cancelled'),
+  fare: Number,
+  distance: Number,
+  duration: Number,
+  createdAt: Timestamp,
+  completedAt: Timestamp
+}
+```
+
+---
+
+## Troubleshooting
+
+### Backend Connection Issues
+- Ensure MongoDB is running and connection string is correct
+- Check if port 4000 is not in use
+- Verify JWT_SECRET is set in .env
+
+### Frontend Issues
+- Clear browser cache and localStorage
+- Ensure backend is running before starting frontend
+- Check browser console for detailed error messages
+- Verify all dependencies are installed
+
+### Socket.io Connection Failed
+- Check if backend server is running
+- Verify socket configuration in `socket.js`
+- Check browser console for connection errors
+- Ensure CORS is properly configured
+
+---
+
+## Scripts
+
+### Backend Scripts
+```bash
+npm run dev     # Start with nodemon (development)
+npm start       # Start production server
+npm run build   # Build check (no actual build needed)
+```
+
+### Frontend Scripts
+```bash
+npm run dev     # Start Vite dev server
+npm run build   # Build for production
+npm run preview # Preview production build
+npm run lint    # Run ESLint checks
+```
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## License
+
+This project is licensed under the ISC License - see the LICENSE file for details.
+
+---
+
+## Support
+
+For support, email support@ubeclone.dev or open an issue on GitHub.
+
+---
+
+**Happy Coding! 🚀**
 
