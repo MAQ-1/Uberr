@@ -9,7 +9,7 @@ import gsap from 'gsap'
 import ConfirmRidePopup from '../components/ConfirmRidePopup.jsx'
 import { SocketDataContext } from '../context/SocketContext.jsx'
 import { CaptainDataContext } from '../context/CaptainContext.jsx'
-import LiveTracking from '../components/liveTracking.jsx' 
+import LiveTracking from '../components/LiveTracking.jsx' 
 
 
 const CaptainHome = () => {

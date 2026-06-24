@@ -6,7 +6,7 @@ import { useState, useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import FinishRide from '../components/FinishRide.jsx'
-import LiveTracking from '../components/liveTracking.jsx'
+import LiveTracking from '../components/LiveTracking.jsx'
 
 const CaptainRiding = () => {
   const location = useLocation()

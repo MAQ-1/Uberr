@@ -9,7 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import downarrow from "../assets/arrow-down-double-fill.png"
 import { useEffect, useContext } from 'react'
 import { SocketDataContext } from '../context/SocketContext'
-import LiveTracking from '../components/liveTracking'
+import LiveTracking from '../components/LiveTracking'
 
 const Riding = () => {
   const [panelOpen, setPanelOpen] = useState(true)
