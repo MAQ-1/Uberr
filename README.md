@@ -2,7 +2,17 @@
 
 A comprehensive ride-sharing application built with modern web technologies. Features real-time tracking, user and captain authentication, ride management, and interactive mapping.
 
+## 🚀 Live Demo
+
+**🌐 Frontend (User Interface):** [https://uberr-nine.vercel.app/](https://uberr-nine.vercel.app/)  
+**🔧 Backend (API Server):** [https://uberr-wysl.onrender.com/](https://uberr-wysl.onrender.com/)
+
+> **📱 Important:** For the best experience, please view the application in **mobile screen size** or use your browser's device simulation mode (F12 → Toggle Device Toolbar). The app is optimized for mobile-first design.
+
+---
+
 ## Table of Contents
+- [Live Demo](#-live-demo)
 - [Project Overview](#project-overview)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
@@ -12,6 +22,7 @@ A comprehensive ride-sharing application built with modern web technologies. Fea
 - [API Endpoints](#api-endpoints)
 - [Features](#features)
 - [Real-Time Communication](#real-time-communication)
+- [Deployment](#-deployment)
 - [Contributing](#contributing)
 
 ---
@@ -648,6 +659,36 @@ npm run dev     # Start Vite dev server
 npm run build   # Build for production
 npm run preview # Preview production build
 npm run lint    # Run ESLint checks
+```
+
+---
+
+## 🚀 Deployment
+
+### Production Environment
+
+**Frontend Deployment:**
+- **Platform:** Vercel
+- **URL:** [https://uberr-nine.vercel.app/](https://uberr-nine.vercel.app/)
+- **Build:** Automated deployment from GitHub main branch
+- **Framework:** Vite + React
+
+**Backend Deployment:**
+- **Platform:** Render
+- **URL:** [https://uberr-wysl.onrender.com/](https://uberr-wysl.onrender.com/)
+- **Database:** MongoDB Atlas (Cloud)
+- **Real-time:** Socket.io enabled
+
+### Environment Variables (Production)
+```
+Frontend (Vercel):
+VITE_BASE_URL=https://uberr-wysl.onrender.com
+VITE_GEOAPIFY_API_KEY=your_geoapify_key
+
+Backend (Render):
+MONGODB_URI=mongodb+srv://...
+JWT_SECRET=your_jwt_secret
+PORT=4000
 ```
 
 ---
