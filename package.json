@@ -2,6 +2,8 @@
   "name": "uber-monorepo",
   "private": true,
   "scripts": {
+    "build": "npm --prefix Backend install && npm --prefix Backend run build",
+    "start": "npm --prefix Backend start",
     "dev": "concurrently -n backend,frontend -c green,cyan \"npm --prefix Backend run dev\" \"npm --prefix Frontend run dev\"",
     "dev:backend": "npm --prefix Backend run dev",
     "dev:frontend": "npm --prefix Frontend run dev"

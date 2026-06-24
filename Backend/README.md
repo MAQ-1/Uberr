@@ -17,6 +17,12 @@
   - [GET /maps/get-coordinates](#get-mapsget-coordinates)
   - [GET /maps/get-distance-time](#get-mapsget-distance-time)
   - [GET /maps/get-suggestions](#get-mapsget-suggestions)
+- [Ride Endpoints](#ride-endpoints)
+  - [POST /rides/create](#post-ridescreate)
+  - [GET /rides/get-fares](#get-ridesget-fares)
+  - [POST /rides/confirm](#post-ridesconfirm)
+  - [GET /rides/start-ride](#get-ridesstart-ride)
+  - [POST /rides/end-ride](#post-ridesend-ride)
 
 ---
 
@@ -1185,3 +1191,142 @@ GET /maps/get-suggestions?input=New%20Yor
 - Input must be at least 3 characters to trigger suggestions.
 - Suggestions are typically sorted by relevance and popularity.
 - The `place_id` can be used for further API calls to get detailed information about a location.
+
+---
+
+## Ride Endpoints
+
+### POST /rides/create
+
+Creates a new ride request for a user. Requires user authentication.
+
+**URL:** `/rides/create`  
+**Method:** `POST`  
+**Auth Required:** Yes (User)  
+**Content-Type:** `application/json`
+
+---
+
+#### Request Body
+
+```json
+{
+  "pickup": "New York, NY, USA",
+  "destination": "Boston, MA, USA",
+  "vehicleType": "car"
+}
+```
+
+#### Input Field Reference
+
+| Field         | Type   | Required | Validation                                |
+|---------------|--------|----------|-------------------------------------------|
+| `pickup`      | String | Yes      | Minimum 3 characters                      |
+| `destination` | String | Yes      | Minimum 3 characters                      |
+| `vehicleType` | String | Yes      | Must be one of: `auto`, `car`, `motorcycle` |
+
+---
+
+### GET /rides/get-fares
+
+Calculates estimated ride fares for different vehicle types. Requires user authentication.
+
+**URL:** `/rides/get-fares`  
+**Method:** `GET`  
+**Auth Required:** Yes (User)  
+**Content-Type:** `application/json`
+
+---
+
+#### Request Query Parameters
+
+| Parameter     | Type   | Required | Validation                          |
+|---------------|--------|----------|-------------------------------------|
+| `pickup`      | String | Yes      | Minimum 3 characters                |
+| `destination` | String | Yes      | Minimum 3 characters                |
+
+#### Example Request
+
+```
+GET /rides/get-fares?pickup=New%20York&destination=Boston
+```
+
+---
+
+### POST /rides/confirm
+
+Confirms and accepts a ride request by a captain. Requires captain authentication.
+
+**URL:** `/rides/confirm`  
+**Method:** `POST`  
+**Auth Required:** Yes (Captain)  
+**Content-Type:** `application/json`
+
+---
+
+#### Request Body
+
+```json
+{
+  "rideId": "6622ff7c0b7e9b5a12345678"
+}
+```
+
+#### Input Field Reference
+
+| Field    | Type   | Required | Validation               |
+|----------|--------|----------|--------------------------|
+| `rideId` | String | Yes      | Must be a valid Mongo ID |
+
+---
+
+### GET /rides/start-ride
+
+Starts an accepted ride using a secure 6-digit OTP verification from the user. Requires captain authentication.
+
+**URL:** `/rides/start-ride`  
+**Method:** `GET`  
+**Auth Required:** Yes (Captain)  
+**Content-Type:** `application/json`
+
+---
+
+#### Request Query Parameters
+
+| Parameter | Type   | Required | Validation               |
+|-----------|--------|----------|--------------------------|
+| `rideId`  | String | Yes      | Must be a valid Mongo ID |
+| `otp`     | String | Yes      | Extactly 6 characters    |
+
+#### Example Request
+
+```
+GET /rides/start-ride?rideId=6622ff7c0b7e9b5a12345678&otp=123456
+```
+
+---
+
+### POST /rides/end-ride
+
+Ends an active ride and triggers payment flow. Requires captain authentication.
+
+**URL:** `/rides/end-ride`  
+**Method:** `POST`  
+**Auth Required:** Yes (Captain)  
+**Content-Type:** `application/json`
+
+---
+
+#### Request Body
+
+```json
+{
+  "rideId": "6622ff7c0b7e9b5a12345678"
+}
+```
+
+#### Input Field Reference
+
+| Field    | Type   | Required | Validation               |
+|----------|--------|----------|--------------------------|
+| `rideId` | String | Yes      | Must be a valid Mongo ID |

@@ -1,73 +1,85 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
-import Start from './pages/Start'
-import CaptainLogin from './pages/CaptainLogin'
-import CaptainSignup from './pages/CaptainSignup'
-import UserLogin from './pages/UserLogin'
-import UserSignup from './pages/UserSignup'
-import Home from './pages/Home'
 import UserProtectedWrapper from './pages/UserProtectedWrapper.jsx'
-import UserLogout from './pages/UserLogout.jsx'
 import CaptainProtectedWrapper from './pages/CaptainProtectedWrapper.jsx'
-import CaptainLogout from './pages/CaptainLogout.jsx'
-import CaptainHome from './pages/CaptainHome.jsx'
-import Riding from './pages/Riding.jsx'
-import CaptainRiding from './pages/CaptainRiding.jsx'
+
+const Start = lazy(() => import('./pages/Start'))
+const CaptainLogin = lazy(() => import('./pages/CaptainLogin'))
+const CaptainSignup = lazy(() => import('./pages/CaptainSignup'))
+const UserLogin = lazy(() => import('./pages/UserLogin'))
+const UserSignup = lazy(() => import('./pages/UserSignup'))
+const Home = lazy(() => import('./pages/Home'))
+const UserLogout = lazy(() => import('./pages/UserLogout.jsx'))
+const CaptainLogout = lazy(() => import('./pages/CaptainLogout.jsx'))
+const CaptainHome = lazy(() => import('./pages/CaptainHome.jsx'))
+const Riding = lazy(() => import('./pages/Riding.jsx'))
+const CaptainRiding = lazy(() => import('./pages/CaptainRiding.jsx'))
 
 
 function App() {
-  
+  const fallback = <div className="p-4 text-center">Loading...</div>
 
   return (
-    <>  
-      {/* Routes to Login pages  */}
-         <Routes>
-             <Route path="/" element={<Start/>} />
-             <Route path="/login" element={<UserLogin/>} />
-             <Route path="/signup" element={<UserSignup/>} />
-           <Route path="/captain-login" element={<CaptainLogin/>} />
-           <Route path="/captain-signup" element={<CaptainSignup/>} />
-           <Route path="/home" element={
-            <UserProtectedWrapper>
-              <Home />
-            </UserProtectedWrapper>
-           } />
+    <>
+      {/* Route-level suspense keeps the initial bundle smaller with lazy-loaded pages. */}
+      <Suspense fallback={fallback}>
+        <Routes>
+          <Route path="/" element={<Start />} />
+          <Route path="/login" element={<UserLogin />} />
+          <Route path="/signup" element={<UserSignup />} />
+          <Route path="/captain-login" element={<CaptainLogin />} />
+          <Route path="/captain-signup" element={<CaptainSignup />} />
 
-           <Route path='/users/logout' element={
-            <UserProtectedWrapper>
-             <UserLogout />
-            </UserProtectedWrapper>
-           }
-           />
+          <Route
+            path="/home"
+            element={
+              <UserProtectedWrapper>
+                <Home />
+              </UserProtectedWrapper>
+            }
+          />
 
-           <Route path='/captains/logout' element={
-            <CaptainProtectedWrapper>
-             <CaptainLogout />
-            </CaptainProtectedWrapper>
-           }
-           />
+          <Route
+            path="/users/logout"
+            element={
+              <UserProtectedWrapper>
+                <UserLogout />
+              </UserProtectedWrapper>
+            }
+          />
 
-           <Route path="/captain-home" element={
-            <CaptainProtectedWrapper>
-              <CaptainHome/>
-            </CaptainProtectedWrapper>
-           } />
+          <Route
+            path="/captains/logout"
+            element={
+              <CaptainProtectedWrapper>
+                <CaptainLogout />
+              </CaptainProtectedWrapper>
+            }
+          />
 
-           <Route path="/riding" element={
-             <Riding/>
-           } />
+          <Route
+            path="/captain-home"
+            element={
+              <CaptainProtectedWrapper>
+                <CaptainHome />
+              </CaptainProtectedWrapper>
+            }
+          />
 
-           <Route path="/captain-riding" element={
-            <CaptainProtectedWrapper>
-              <CaptainRiding/>
-            </CaptainProtectedWrapper>
-           } />
+          <Route path="/riding" element={<Riding />} />
 
-         </Routes>
-    
+          <Route
+            path="/captain-riding"
+            element={
+              <CaptainProtectedWrapper>
+                <CaptainRiding />
+              </CaptainProtectedWrapper>
+            }
+          />
+        </Routes>
+      </Suspense>
     </>
-
   )
 }
 
